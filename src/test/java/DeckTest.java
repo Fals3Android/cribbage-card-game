@@ -81,6 +81,21 @@ class DeckTest {
     }
 
     @Test
+    public void shouldContainAnyNumberSuitsTheUserChooses() {
+        Deck instance = new Deck();
+        List<String> stubSuits = Arrays.asList("clubs");
+        instance.setSuits(stubSuits);
+        assertEquals("clubs", instance.getSuits().get(0));
+    }
+
+    @Test
+    public void shouldCreateDeckWithCardsUserSpecifies() {
+        Deck instance = new Deck(Arrays.asList("two"), Arrays.asList("clubs"));
+        assertEquals(1, instance.getCards().size());
+        assertEquals(1, instance.getCards().get("clubs:two"));
+    }
+
+    @Test
     public void shouldScoreEachCardInTheTraditionalManner() {
         Deck instance = new Deck();
         Map stubDeck = instance.getCards();
@@ -105,7 +120,7 @@ class DeckTest {
             counter++;
         }
 
-        assertEquals(true, doesEqualExactly);
+        assertTrue(doesEqualExactly);
     }
 
     @Test
@@ -125,7 +140,6 @@ class DeckTest {
         }
 
         boolean result = matches < 52;
-        System.out.println(stubDeck);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 }

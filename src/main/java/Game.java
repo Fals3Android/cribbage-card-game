@@ -9,10 +9,10 @@ import java.util.*;
 
 public class Game {
     Deck defaultDeck;
-    public Map<String, Integer> cards = new LinkedHashMap<String, Integer>();
-    public Map<String, Integer> playerOneCards = new LinkedHashMap<String, Integer>();
-    public Map<String, Integer> playerTwoCards = new LinkedHashMap<String, Integer>();
-    public Map<String, Integer> crib = new LinkedHashMap<String, Integer>();
+    public Map<String, Integer> cards = new LinkedHashMap<>();
+    public Map<String, Integer> playerOneCards = new LinkedHashMap<>();
+    public Map<String, Integer> playerTwoCards = new LinkedHashMap<>();
+    public Map<String, Integer> crib = new LinkedHashMap<>();
 
     Game(Deck deck) {
         defaultDeck = deck;
@@ -25,26 +25,29 @@ public class Game {
 
         while(counter != maxCardsPerDeal) {
             String p1Key = (String) cards.keySet().toArray()[counter];
-            int p1Value =  (int) cards.get(p1Key);
-            this.playerOneCards.put(p1Key, p1Value);
-            cards.remove(counter);
+            int p1Value =  cards.get(p1Key);
+            playerOneCards.put(p1Key, p1Value);
+            cards.remove(p1Key);
             counter += 1;
 
             String p2Key = (String) cards.keySet().toArray()[counter];
-            int p2Value =  (int) cards.get(p2Key);
+            int p2Value =  cards.get(p2Key);
             playerTwoCards.put(p2Key, p2Value);
-            cards.remove(counter);
+            cards.remove(p2Key);
             counter += 1;
         }
     }
 
+    /**
+     * Ideally crib creation should include the choice to remove the lowest scoring cards, from a players hand.
+     */
     public void createCrib() {
         int counter = 0;
 
         while(counter < 2) {
-            String p1Key = (String) playerOneCards.keySet().toArray()[0];
-            int p1Value =  (int) playerOneCards.get(p1Key);
-            playerOneCards.remove(0);
+            String p1Key = (String) playerOneCards.keySet().toArray()[counter];
+            int p1Value =  playerOneCards.get(p1Key);
+            playerOneCards.remove(p1Key);
             crib.put(p1Key, p1Value);
             counter++;
         }
@@ -53,10 +56,20 @@ public class Game {
 
         while(counter < 2) {
             String p2Key = (String) playerTwoCards.keySet().toArray()[0];
-            int p2Value =  (int) playerTwoCards.get(p2Key);
-            playerTwoCards.remove(0);
+            int p2Value =  playerTwoCards.get(p2Key);
+            playerTwoCards.remove(p2Key);
             crib.put(p2Key, p2Value);
             counter++;
         }
+    }
+
+    public void cutDeck() {
+        String middleKey = (String) cards.keySet().toArray()[(int) Math.ceil(cards.size() / 2)];
+        int middleValue =  cards.get(middleKey);
+        cards.remove(middleKey);
+        Map<String, Integer> newMap = new LinkedHashMap<>();
+        newMap.put(middleKey, middleValue);
+        newMap.putAll(cards);
+        cards = newMap;
     }
 }
