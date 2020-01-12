@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -36,5 +38,29 @@ class GameTest {
         assertEquals("clubs:two", cardKeys[0]);
         assertEquals("clubs:ace", cardKeys[1]);
         assertEquals("clubs:three", cardKeys[2]);
+    }
+
+    @Nested
+    @DisplayName("peggingPhase()")
+    class PeggingPhase {
+        @Test
+        public void shouldAddTwoPointsForARunningScoreOfFifteen() {
+            Deck defaultDeck = new Deck();
+            Game instance = new Game(defaultDeck);
+            instance.peggingPlay("clubs", "king", 10, 0);
+            instance.peggingPlay("diamonds", "five", 5, 1);
+            assertEquals(0, instance.playerOneScore);
+            assertEquals(2, instance.playerTwoScore);
+        }
+
+        @Test
+        public void shouldScoreAPair() {
+            Deck defaultDeck = new Deck();
+            Game instance = new Game(defaultDeck);
+            instance.peggingPlay("clubs", "five", 5, 0);
+            instance.peggingPlay("diamonds", "five", 5, 1);
+            assertEquals(0, instance.playerOneScore);
+            assertEquals(2, instance.playerTwoScore);
+        }
     }
 }
